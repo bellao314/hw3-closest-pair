@@ -37,8 +37,25 @@ Outcome brute(const vector<Point>& data) {
 
 
 // The student's implementation of the O(n log n) divide-and-conquer approach
+template <typename IT>
+Outcome efficientUtility(IT start, IT stop, const vector<Point>& sortedY) {
+    if (stop-start <= CUTOFF) {
+        return bruteUtility(start, stop);
+    }
+    int dist = stop - start;
+    IT mid = start + dist/2;
+    Outcome left = efficientUtility(start, mid, sortedY);
+    Outcome right = efficientUtility(mid+1, stop, sortedY);
+    return (left.dsq < right.dsq ? left : right);
+}
+
 Outcome efficient(const vector<Point>& data) {
-    return Outcome();
+    vector<Point> sortedDataX(data);
+    vector<Point> sortedDataY(data);
+    sort(sortedDataX.begin(), sortedDataX.end(), compareByX);
+    sort(sortedDataY.begin(), sortedDataY.end(), compareByY);
+
+    return efficientUtility(sortedDataX.begin(), sortedDataX.end(), sortedDataY);
 }
 
 // An extra credit algorithm
