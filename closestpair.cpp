@@ -63,7 +63,7 @@ Outcome efficientUtility(IT start, IT stop, const vector<Point>& sortedY) {
     Outcome right = efficientUtility(mid, stop, rightY);
     Outcome closest = (left.dsq < right.dsq ? left : right);
 
-    // check within (closest) of the midpoint
+    // check within delta of the midpoint
     long long midX = (*mid).x;
     long long delta = closest.dsq;
     vector<Point> inStrip;
