@@ -68,15 +68,16 @@ Outcome efficientUtility(IT start, IT stop, const vector<Point>& sortedY) {
     long long delta = closest.dsq;
     vector<Point> inStrip;
     for (Point p : sortedY) {
-        if ((p.x-midX) * (p.x-midX) <= delta) {
+        if (delta > 0 && (p.x - midX) * (p.x - midX) < delta) {
             inStrip.push_back(p);
         }
     }
     for (size_t i=0; i < inStrip.size(); i++) {
-        for (size_t j=i+1; j < inStrip.size() && (long long) (inStrip[j].y - inStrip[i].y) * (inStrip[j].y - inStrip[i].y) <= delta; j++) {
+        for (size_t j=i+1; j < inStrip.size() && (long long) (inStrip[j].y - inStrip[i].y) * (inStrip[j].y - inStrip[i].y) < delta; j++) {
             long long temp = distSquared(inStrip[i], inStrip[j]);
             if (temp < delta) {
                 closest = Outcome(inStrip[i], inStrip[j], temp);
+                delta = temp;
             }
         }
     }
