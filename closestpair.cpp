@@ -65,7 +65,22 @@ Outcome efficientUtility(IT start, IT stop, const vector<Point>& sortedY) {
     Outcome closest = (left.dsq < right.dsq ? left : right);
 
     // check within (closest) of the midpoint
-    long midX = (*mid).x;
+    long long midX = (*mid).x;
+    long long delta = closest.dsq;
+    vector<Point> inStrip;
+    for (Point p : sortedY) {
+        if ((long long)p.x * p.x >= midX * midX - delta && (long long)p.x * p.x <= midX * midX + delta) {
+            inStrip.push_back(p);
+        }
+    }
+    for (int i=0; i < inStrip.size(); ++i) {
+        for (int j=i+1; j < inStrip.size() && (long long) (inStrip[j].y - inStrip[i].y) * (inStrip[j].y - inStrip[i].y) <= delta; ++j) {
+            long long temp = distSquared(inStrip[i], inStrip[j]);
+            if (temp < closest.dsq) {
+                closest = Outcome(inStrip[i], inStrip[j], temp);
+            }
+        }
+    }
 
     return closest;
 }
