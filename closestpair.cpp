@@ -33,8 +33,7 @@ Outcome brute(const vector<Point>& data) {
 | You are free to change this cutoff to optimize, but please make sure
 | that the logic of your implementation rely on this defined CUTOFF constant.
 --------------------------------------------------------------*/
-#define CUTOFF 3          // you may change this, but please 
-
+#define CUTOFF 4          // you may change this, but please 
 
 // The student's implementation of the O(n log n) divide-and-conquer approach
 template <typename IT>
@@ -69,14 +68,14 @@ Outcome efficientUtility(IT start, IT stop, const vector<Point>& sortedY) {
     long long delta = closest.dsq;
     vector<Point> inStrip;
     for (Point p : sortedY) {
-        if ((long long)p.x * p.x >= midX * midX - delta && (long long)p.x * p.x <= midX * midX + delta) {
+        if ((p.x-midX) * (p.x-midX) <= delta) {
             inStrip.push_back(p);
         }
     }
-    for (int i=0; i < inStrip.size(); ++i) {
-        for (int j=i+1; j < inStrip.size() && (long long) (inStrip[j].y - inStrip[i].y) * (inStrip[j].y - inStrip[i].y) <= delta; ++j) {
+    for (size_t i=0; i < inStrip.size(); i++) {
+        for (size_t j=i+1; j < inStrip.size() && (long long) (inStrip[j].y - inStrip[i].y) * (inStrip[j].y - inStrip[i].y) <= delta; j++) {
             long long temp = distSquared(inStrip[i], inStrip[j]);
-            if (temp < closest.dsq) {
+            if (temp < delta) {
                 closest = Outcome(inStrip[i], inStrip[j], temp);
             }
         }
