@@ -64,7 +64,7 @@ Outcome efficientUtility(IT start, IT stop, const vector<Point>& sortedY) {
     Outcome right = efficientUtility(mid, stop, rightY);
     Outcome closest = (left.dsq < right.dsq ? left : right);
 
-    // check within (closest) of the midpoint
+    // check within delta of the midpoint
     long long midX = (*mid).x;
     long long delta = closest.dsq;
     vector<Point> inStrip;
@@ -73,8 +73,9 @@ Outcome efficientUtility(IT start, IT stop, const vector<Point>& sortedY) {
             inStrip.push_back(p);
         }
     }
-    for (int i=0; i < inStrip.size(); ++i) {
-        for (int j=i+1; j < inStrip.size() && (long long) (inStrip[j].y - inStrip[i].y) * (inStrip[j].y - inStrip[i].y) <= delta; ++j) {
+
+    for (int i=0; i < inStrip.size(); i++) {
+        for (int j=i+1; j < inStrip.size() && (long long) (inStrip[j].y - inStrip[i].y) * (inStrip[j].y - inStrip[i].y) <= delta; j++) {
             long long temp = distSquared(inStrip[i], inStrip[j]);
             if (temp < closest.dsq) {
                 closest = Outcome(inStrip[i], inStrip[j], temp);
