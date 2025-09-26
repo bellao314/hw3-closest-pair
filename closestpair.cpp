@@ -39,14 +39,35 @@ Outcome brute(const vector<Point>& data) {
 // The student's implementation of the O(n log n) divide-and-conquer approach
 template <typename IT>
 Outcome efficientUtility(IT start, IT stop, const vector<Point>& sortedY) {
+    // base case of using the brute-force implementation
     if (stop-start <= CUTOFF) {
         return bruteUtility(start, stop);
     }
+
+    // find the midpoint of the sorted x-values
     int dist = stop - start;
     IT mid = start + dist/2;
-    Outcome left = efficientUtility(start, mid, sortedY);
-    Outcome right = efficientUtility(mid+1, stop, sortedY);
-    return (left.dsq < right.dsq ? left : right);
+
+    // split the sorted y values into left and right
+    vector<Point> leftY;
+    vector<Point> rightY;
+    for (Point p : sortedY) {
+        if (compareByX(p, *mid)) {
+            leftY.push_back(p);
+        } else {
+            rightY.push_back(p);
+        }
+    }
+
+    // find the closest points on the left and right of the midpoint
+    Outcome left = efficientUtility(start, mid, leftY);
+    Outcome right = efficientUtility(mid, stop, rightY);
+    Outcome closest = (left.dsq < right.dsq ? left : right);
+
+    // check within (closest) of the midpoint
+    long midX = (*mid).x;
+
+    return closest;
 }
 
 Outcome efficient(const vector<Point>& data) {
